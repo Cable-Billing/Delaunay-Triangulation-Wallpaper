@@ -20,11 +20,17 @@ let delaunay;
 
 function addPoints() {
     if (numberOfPoints < numberOfPointsAllowed) {
-        if (Math.random() > 0.5) { xTrajectory = 1; }
-        else { xTrajectory = -1; }
+        const numberX = Math.random();
+        if (numberX > 0.75) { xTrajectory = 1; }
+        else if (numberX > 0.5 && numberX < 0.75) { xTrajectory = 0.5; }
+        else if (numberX > 0.25 && numberX < 0.5) { xTrajectory = -0.5; }
+        else if (numberX < 0.25) { xTrajectory = -1; }
     
-        if (Math.random() > 0.5) { yTrajectory = 1; }
-        else { yTrajectory = -1; }
+        const numberY = Math.random();
+        if (numberY > 0.75) { yTrajectory = 1; }
+        else if (numberY > 0.5 && numberY < 0.75) { yTrajectory = 0.5; }
+        else if (numberY > 0.25 && numberY < 0.5) { yTrajectory = -0.5; }
+        else if (numberY < 0.25) { yTrajectory = -1; }
     
         points.push([Math.round(Math.random() * innerWidth), Math.round(Math.random() * innerHeight), xTrajectory, yTrajectory]);
         numberOfPoints++;
@@ -33,11 +39,11 @@ function addPoints() {
 
 function removePoints() {
     points.forEach(function(point, index, object) {
-        if (point[0] > window.innerWidth || point[0] < 0) {
+        if (point[0] > (window.innerWidth + 200) || point[0] < -200) {
             object.splice(index, 1);
             numberOfPoints--;
         }
-        if (point[1] > window.innerHeight || point[1] < 0) {
+        if (point[1] > (window.innerHeight + 200) || point[1] < -200) {
             object.splice(index, 1);
             numberOfPoints--;
         }
