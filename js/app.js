@@ -13,25 +13,45 @@ function forEachTriangleEdge(points, delaunay, callback) {
     }
 }
 
+const numberOfPointsAllowed = 80; 
+let numberOfPoints = 0;
 let points = [];
 let delaunay;
 
-function setup() {
-    createCanvas(window.innerWidth, window.innerHeight);
-    const numberOfPoints = 100;
-    for (let i = 0; i < numberOfPoints; i++) {
+function addPoints() {
+    if (numberOfPoints < numberOfPointsAllowed) {
         if (Math.random() > 0.5) { xTrajectory = 1; }
         else { xTrajectory = -1; }
-
+    
         if (Math.random() > 0.5) { yTrajectory = 1; }
         else { yTrajectory = -1; }
-        
+    
         points.push([Math.round(Math.random() * innerWidth), Math.round(Math.random() * innerHeight), xTrajectory, yTrajectory]);
+        numberOfPoints++;
     }
 }
 
+function removePoints() {
+    points.forEach(function(point, index, object) {
+        if (point[0] > window.innerWidth || point[0] < 0) {
+            object.splice(index, 1);
+            numberOfPoints--;
+        }
+        if (point[1] > window.innerHeight || point[1] < 0) {
+            object.splice(index, 1);
+            numberOfPoints--;
+        }
+    });
+}
+
+function setup() {
+    createCanvas(window.innerWidth, window.innerHeight);
+}
+
 function draw() {
-    background(255, 255, 255);
+    background(255, 255, 255)
+    addPoints();
+    removePoints()
     delaunay = Delaunator.from(points);
     forEachTriangleEdge(points, delaunay, line);
     points.forEach(point => {
